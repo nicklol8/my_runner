@@ -1,3 +1,19 @@
 body {
   background-color: deeppink;
 }
+#game {
+  display: none;
+  max-width: 70%;
+}
+#game-goes-here {
+  max-width: 70%;
+}
+#leaderboard {
+  display: none;
+}
+.user {
+  text-align: center;
+}
+.pricing-table {
+  min-width: 60%;
+}

@@ -4,12 +4,36 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Run my dude</title>
+    <title>Donut Dash</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/mustard-ui@latest/dist/css/mustard-ui.min.css"
+    />
+    <link rel="stylesheet" href="css/main.css" />
     <script src="//cdn.jsdelivr.net/npm/phaser@3.19.0/dist/phaser.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/js/main.js"></script>
     <script src="/js/game.js"></script>
   </head>
   <body>
-    <input />
+    <div class="row">
+      <h2 class="col col-lg-5" onclick="hideGame()">Play Game</h2>
+      <h2 class="col col-lg-5" onclick="hideLeaderboard()">Show Leaderboard</h2>
+      <div id="game" class="col">
+        <div id="game-goes-here"></div>
+        <input
+          id="username"
+          type="text"
+          placeholder="Satisfied with your high score? Add your name to the leaderboard!"
+        /><button onclick="postScore()">
+          Add your high score
+        </button>
+      </div>
+      <div class="pricing-table row">
+        <div class="col col-lg-10">
+          <div id="leaderboard" class="package"></div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

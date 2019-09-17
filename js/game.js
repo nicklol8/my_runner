@@ -4,13 +4,13 @@ let game;
 
 const gameOptions = {
   platformSpeedRange: [300, 300],
-  mountainSpeed: 80,
+  cloudSpeed: 80,
   spawnRange: [80, 300],
   platformSizeRange: [100, 350],
   platformHeightRange: [-8, 8],
   platformHeightScale: 15,
   platformVerticalLimit: [0.4, 0.8],
-  playerGravity: 900,
+  playerGravity: 1000,
   jumpForce: 400,
   playerStartPosition: 200,
   jumps: 2,
@@ -26,7 +26,8 @@ window.onload = function() {
     backgroundColor: 0x0c88c7,
     physics: {
       default: 'arcade'
-    }
+    },
+    parent: 'game-goes-here'
   };
   game = new Phaser.Game(gameConfig);
   window.focus();
@@ -45,24 +46,24 @@ class preloadGame extends Phaser.Scene {
   }
   preload() {
     this.load.image('platform', '../assets/ground.png');
-    this.load.spritesheet('player', '../assets/player.png', {
-      frameWidth: 24,
-      frameHeight: 48
+    this.load.spritesheet('player', '../assets/playerRun2.png', {
+      frameWidth: 624,
+      frameHeight: 500
     });
     this.load.spritesheet('coin', '../assets/coin.png', {
       frameWidth: 20,
       frameHeight: 20
     });
-    this.load.spritesheet('mountain', '../assets/mountain.png', {
-      frameWidth: 512,
-      frameHeight: 512
+    this.load.spritesheet('cloud', '../assets/donuts.png', {
+      frameWidth: 1250,
+      frameHeight: 1250
     });
   }
   create() {
     this.anims.create({
       key: 'run',
       frames: this.anims.generateFrameNumbers('player', { start: 0, end: 15 }),
-      frameRate: 8,
+      frameRate: 30,
       repeat: -1
     });
     this.anims.create({
@@ -121,12 +122,11 @@ class PlayGame extends Phaser.Scene {
       }
     });
 
-    // mountains
-    this.mountainGroup = this.add.group();
-    this.addMountains();
+    // clouds
+    this.cloudGroup = this.add.group();
+    this.addClouds();
 
     // player
-    // this.player.setScale(1);
     this.playerJumps = 0;
     this.player = this.physics.add.sprite(
       gameOptions.playerStartPosition,
@@ -134,6 +134,7 @@ class PlayGame extends Phaser.Scene {
       'player'
     );
     this.player.setGravityY(gameOptions.playerGravity);
+    this.player.setScale(0.11);
 
     // player vs platform
     this.physics.add.collider(
@@ -174,6 +175,8 @@ class PlayGame extends Phaser.Scene {
 
     //jump
     this.input.on('pointerdown', this.jump, this);
+    this.input.keyboard.on('keydown-SPACE', this.jump, this);
+    this.input.keyboard.addCapture('SPACE');
   }
 
   addScore() {
@@ -181,31 +184,32 @@ class PlayGame extends Phaser.Scene {
     scoreText.setText('Score: ' + score);
   }
 
-  // mountains
-  addMountains() {
-    let rightmostMountain = this.getRightmostMountain();
-    if (rightmostMountain < game.config.width * 2) {
-      let mountain = this.physics.add.sprite(
-        rightmostMountain + Phaser.Math.Between(100, 350),
-        game.config.height + Phaser.Math.Between(0, 100),
-        'mountain'
+  // clouds
+  addClouds() {
+    let rightmostCloud = this.getRightmostCloud();
+    if (rightmostCloud < game.config.width * 2) {
+      let cloud = this.physics.add.sprite(
+        rightmostCloud + Phaser.Math.Between(100, 350),
+        game.config.height + Phaser.Math.Between(-100, 300),
+        'cloud'
       );
-      mountain.setOrigin(0.5, 1);
-      mountain.body.setVelocityX(gameOptions.mountainSpeed * -1);
-      this.mountainGroup.add(mountain);
+      cloud.setOrigin(0.5, 1);
+      cloud.body.setVelocityX(gameOptions.cloudSpeed * -1);
+      this.cloudGroup.add(cloud);
       if (Phaser.Math.Between(0, 1)) {
-        mountain.setDepth(-1);
+        cloud.setDepth(-1);
       }
-      mountain.setFrame(Phaser.Math.Between(0, 3));
-      this.addMountains();
+      cloud.setFrame(Phaser.Math.Between(0, 3));
+      cloud.setScale(0.4);
+      this.addClouds();
     }
   }
-  getRightmostMountain() {
-    let rightmostMountain = -200;
-    this.mountainGroup.getChildren().forEach(function(mountain) {
-      rightmostMountain = Math.max(rightmostMountain, mountain.x);
+  getRightmostCloud() {
+    let rightmostCloud = -200;
+    this.cloudGroup.getChildren().forEach(function(cloud) {
+      rightmostCloud = Math.max(rightmostCloud, cloud.x);
     });
-    return rightmostMountain;
+    return rightmostCloud;
   }
 
   addPlatform(platformWidth, posX, posY) {
@@ -305,15 +309,15 @@ class PlayGame extends Phaser.Scene {
       }
     }, this);
 
-    // reuse mountain
-    this.mountainGroup.getChildren().forEach(function(mountain) {
-      if (mountain.x < -mountain.displayWidth) {
-        let rightmostMountain = this.getRightmostMountain();
-        mountain.x = rightmostMountain + Phaser.Math.Between(100, 350);
-        mountain.y = game.config.height + Phaser.Math.Between(0, 100);
-        mountain.setFrame(Phaser.Math.Between(0, 3));
+    // reuse cloud
+    this.cloudGroup.getChildren().forEach(function(cloud) {
+      if (cloud.x < -cloud.displayWidth) {
+        let rightmostCloud = this.getRightmostCloud();
+        cloud.x = rightmostCloud + Phaser.Math.Between(100, 350);
+        cloud.y = game.config.height + Phaser.Math.Between(0, 100);
+        cloud.setFrame(Phaser.Math.Between(0, 3));
         if (Phaser.Math.Between(0, 1)) {
-          mountain.setDepth(-1);
+          cloud.setDepth(-1);
         }
       }
     }, this);
@@ -348,7 +352,7 @@ class PlayGame extends Phaser.Scene {
       );
     }
     highscoreText.text =
-      'High Score: ' + localStorage.getItem('runnerHighScore');
+      'Your High Score: ' + localStorage.getItem('runnerHighScore');
     if (score > localStorage.getItem('runnerHighScore')) {
       localStorage.setItem('runnerHighScore', score);
     }
