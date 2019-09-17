@@ -1,6 +1,7 @@
 const hideGame = () => {
   const game = document.getElementById('game');
   document.getElementById('leaderboard').style.display = 'none';
+  document.getElementById('about').style.display = 'none';
   if (game.style.display === 'block') {
     game.style.display = 'none';
   } else {
@@ -44,11 +45,23 @@ const populateLeaderboard = async () => {
 const hideLeaderboard = () => {
   const leaderboard = document.getElementById('leaderboard');
   document.getElementById('game').style.display = 'none';
+  document.getElementById('about').style.display = 'none';
   if (leaderboard.style.display === 'block') {
     leaderboard.style.display = 'none';
   } else {
     leaderboard.style.display = 'block';
     populateLeaderboard();
+  }
+};
+
+const hideAbout = () => {
+  const about = document.getElementById('about');
+  document.getElementById('game').style.display = 'none';
+  document.getElementById('leaderboard').style.display = 'none';
+  if (about.style.display === 'block') {
+    about.style.display = 'none';
+  } else {
+    about.style.display = 'block';
   }
 };
 

@@ -21,3 +21,9 @@ h2 {
   cursor: pointer;
   color: white;
 }
+.thanks {
+  color: whitesmoke;
+}
+.thanks a {
+  color: cyan;
+}
