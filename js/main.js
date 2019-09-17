@@ -57,7 +57,7 @@ const postScore = async () => {
   const playerName = document.getElementById('username').value;
 
   const newUser = await axios.post(
-    'http://localhost:3000/leaderboards/1/users',
+    'https://donutdash.herokuapp.com/leaderboards/1/users',
     {
       name: playerName,
       score: highScore
