@@ -63,4 +63,5 @@ const postScore = async () => {
       score: highScore
     }
   );
+  document.getElementById('username').value = '';
 };
