@@ -9,7 +9,9 @@ const hideGame = () => {
 };
 
 const populateLeaderboard = async () => {
-  const apiData = await axios.get('http://localhost:3000/leaderboards/1');
+  const apiData = await axios.get(
+    'http://donutdash.herokuapp.com/leaderboards/1'
+  );
   const data = apiData.data.users;
   const leaderboard = document.getElementById('leaderboard');
   leaderboard.innerHTML = '';
