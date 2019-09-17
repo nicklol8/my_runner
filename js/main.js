@@ -63,5 +63,4 @@ const postScore = async () => {
       score: highScore
     }
   );
-  console.log('new', newUser);
 };
