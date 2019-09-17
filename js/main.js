@@ -64,4 +64,5 @@ const postScore = async () => {
     }
   );
   document.getElementById('username').value = '';
+  hideLeaderboard();
 };
