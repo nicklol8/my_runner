@@ -17,3 +17,6 @@ body {
 .pricing-table {
   min-width: 60%;
 }
+h2 {
+  cursor: pointer;
+}
