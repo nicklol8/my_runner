@@ -4,7 +4,7 @@ let game;
 
 const gameOptions = {
   platformSpeedRange: [300, 300],
-  cloudSpeed: 80,
+  donutSpeed: 80,
   spawnRange: [80, 300],
   platformSizeRange: [100, 350],
   platformHeightRange: [-8, 8],
@@ -14,7 +14,7 @@ const gameOptions = {
   jumpForce: 400,
   playerStartPosition: 200,
   jumps: 2,
-  coinPercent: 100
+  coinPercent: 30
 };
 
 window.onload = function() {
@@ -54,7 +54,7 @@ class preloadGame extends Phaser.Scene {
       frameWidth: 20,
       frameHeight: 20
     });
-    this.load.spritesheet('cloud', '../assets/donuts.png', {
+    this.load.spritesheet('donut', '../assets/donuts.png', {
       frameWidth: 1250,
       frameHeight: 1250
     });
@@ -122,9 +122,9 @@ class PlayGame extends Phaser.Scene {
       }
     });
 
-    // clouds
-    this.cloudGroup = this.add.group();
-    this.addClouds();
+    // donuts
+    this.donutGroup = this.add.group();
+    this.addDonuts();
 
     // player
     this.playerJumps = 0;
@@ -184,32 +184,32 @@ class PlayGame extends Phaser.Scene {
     scoreText.setText('Score: ' + score);
   }
 
-  // clouds
-  addClouds() {
-    let rightmostCloud = this.getRightmostCloud();
-    if (rightmostCloud < game.config.width * 2) {
-      let cloud = this.physics.add.sprite(
-        rightmostCloud + Phaser.Math.Between(100, 350),
+  // donuts
+  addDonuts() {
+    let rightmostDonut = this.getRightmostDonut();
+    if (rightmostDonut < game.config.width * 2) {
+      let donut = this.physics.add.sprite(
+        rightmostDonut + Phaser.Math.Between(100, 350),
         game.config.height + Phaser.Math.Between(-100, 300),
-        'cloud'
+        'donut'
       );
-      cloud.setOrigin(0.5, 1);
-      cloud.body.setVelocityX(gameOptions.cloudSpeed * -1);
-      this.cloudGroup.add(cloud);
+      donut.setOrigin(0.5, 1);
+      donut.body.setVelocityX(gameOptions.donutSpeed * -1);
+      this.donutGroup.add(donut);
       if (Phaser.Math.Between(0, 1)) {
-        cloud.setDepth(-1);
+        donut.setDepth(-1);
       }
-      cloud.setFrame(Phaser.Math.Between(0, 3));
-      cloud.setScale(0.4);
-      this.addClouds();
+      donut.setFrame(Phaser.Math.Between(0, 3));
+      donut.setScale(0.4);
+      this.addDonuts();
     }
   }
-  getRightmostCloud() {
-    let rightmostCloud = -200;
-    this.cloudGroup.getChildren().forEach(function(cloud) {
-      rightmostCloud = Math.max(rightmostCloud, cloud.x);
+  getRightmostDonut() {
+    let rightmostDonut = -200;
+    this.donutGroup.getChildren().forEach(function(donut) {
+      rightmostDonut = Math.max(rightmostDonut, donut.x);
     });
-    return rightmostCloud;
+    return rightmostDonut;
   }
 
   addPlatform(platformWidth, posX, posY) {
@@ -309,15 +309,15 @@ class PlayGame extends Phaser.Scene {
       }
     }, this);
 
-    // reuse cloud
-    this.cloudGroup.getChildren().forEach(function(cloud) {
-      if (cloud.x < -cloud.displayWidth) {
-        let rightmostCloud = this.getRightmostCloud();
-        cloud.x = rightmostCloud + Phaser.Math.Between(100, 350);
-        cloud.y = game.config.height + Phaser.Math.Between(0, 100);
-        cloud.setFrame(Phaser.Math.Between(0, 3));
+    // reuse donut
+    this.donutGroup.getChildren().forEach(function(donut) {
+      if (donut.x < -donut.displayWidth) {
+        let rightmostDonut = this.getRightmostDonut();
+        donut.x = rightmostDonut + Phaser.Math.Between(100, 350);
+        donut.y = game.config.height + Phaser.Math.Between(0, 100);
+        donut.setFrame(Phaser.Math.Between(0, 3));
         if (Phaser.Math.Between(0, 1)) {
-          cloud.setDepth(-1);
+          donut.setDepth(-1);
         }
       }
     }, this);
