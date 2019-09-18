@@ -14,7 +14,7 @@ const gameOptions = {
   jumpForce: 400,
   playerStartPosition: 200,
   jumps: 2,
-  coinPercent: 30
+  coinPercent: 100
 };
 
 window.onload = function() {
